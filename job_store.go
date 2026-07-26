@@ -351,19 +351,22 @@ func (s *JobStore) InventoryIDForRun(ctx context.Context, runID uuid.UUID) (*int
 // LaunchTemplateInfo is what LaunchJob needs to validate a launch: the
 // job_templates.id that owns the RBAC roles plus the prompt-on-launch config.
 type LaunchTemplateInfo struct {
-	ID                   int64           `db:"id"`
-	AskVariablesOnLaunch bool            `db:"ask_variables_on_launch"`
-	AskLimitOnLaunch     bool            `db:"ask_limit_on_launch"`
-	SurveyEnabled        bool            `db:"survey_enabled"`
-	SurveySpec           json.RawMessage `db:"survey_spec"`
-	AllowSimultaneous    bool            `db:"allow_simultaneous"`
+	ID                    int64           `db:"id"`
+	AskVariablesOnLaunch  bool            `db:"ask_variables_on_launch"`
+	AskLimitOnLaunch      bool            `db:"ask_limit_on_launch"`
+	AskInventoryOnLaunch  bool            `db:"ask_inventory_on_launch"`
+	AskCredentialOnLaunch bool            `db:"ask_credential_on_launch"`
+	SurveyEnabled         bool            `db:"survey_enabled"`
+	SurveySpec            json.RawMessage `db:"survey_spec"`
+	AllowSimultaneous     bool            `db:"allow_simultaneous"`
 }
 
 // LaunchTemplateInfo loads the launch-time template config by unified template id.
 func (s *JobStore) LaunchTemplateInfo(ctx context.Context, unifiedTemplateID int64) (LaunchTemplateInfo, error) {
 	var jt LaunchTemplateInfo
 	err := s.db.GetContext(ctx, &jt,
-		`SELECT id, ask_variables_on_launch, ask_limit_on_launch, survey_enabled, survey_spec, allow_simultaneous
+		`SELECT id, ask_variables_on_launch, ask_limit_on_launch, ask_inventory_on_launch,
+		        ask_credential_on_launch, survey_enabled, survey_spec, allow_simultaneous
 		 FROM job_templates WHERE unified_job_template_id = $1`, unifiedTemplateID)
 	if err != nil {
 		return jt, fmt.Errorf("load launch template info: %w", err)

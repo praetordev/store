@@ -70,14 +70,15 @@ func (s *TemplateStore) Create(ctx context.Context, input models.JobTemplate) (m
 
 	// 2. Insert into job_templates
 	query := `
-		INSERT INTO job_templates (organization_id, name, description, playbook, playbook_content, project_id, inventory_id, job_type, verbosity, unified_job_template_id, credential_id, extra_vars, job_limit, ask_variables_on_launch, ask_limit_on_launch, survey_enabled, survey_spec, webhook_enabled, webhook_service, webhook_key, use_fact_cache, execution_pack_id, allow_simultaneous)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
+		INSERT INTO job_templates (organization_id, name, description, playbook, playbook_content, project_id, inventory_id, job_type, verbosity, unified_job_template_id, credential_id, extra_vars, job_limit, ask_variables_on_launch, ask_limit_on_launch, ask_inventory_on_launch, ask_credential_on_launch, survey_enabled, survey_spec, webhook_enabled, webhook_service, webhook_key, use_fact_cache, execution_pack_id, allow_simultaneous)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
 		RETURNING ` + JobTemplateCols
 	if err := tx.QueryRowxContext(ctx, query,
 		input.OrganizationID, input.Name, input.Description,
 		input.Playbook, input.PlaybookContent, input.ProjectID, input.InventoryID,
 		input.JobType, input.Verbosity, ujtID, input.CredentialID,
 		input.ExtraVars, input.JobLimit, input.AskVariablesOnLaunch, input.AskLimitOnLaunch,
+		input.AskInventoryOnLaunch, input.AskCredentialOnLaunch,
 		input.SurveyEnabled, input.SurveySpec,
 		input.WebhookEnabled, input.WebhookService, input.WebhookKey, input.UseFactCache,
 		input.ExecutionPackID, input.AllowSimultaneous,
@@ -97,9 +98,10 @@ func (s *TemplateStore) Update(ctx context.Context, id int64, input models.JobTe
 		SET name = $2, description = $3, playbook = $4, playbook_content = $5,
 		    project_id = $6, verbosity = $7, inventory_id = $8, credential_id = $9,
 		    extra_vars = $10, job_limit = $11, ask_variables_on_launch = $12, ask_limit_on_launch = $13,
-		    survey_enabled = $14, survey_spec = $15,
-		    webhook_enabled = $16, webhook_service = $17, webhook_key = $18, use_fact_cache = $19,
-		    execution_pack_id = $20, allow_simultaneous = $21,
+		    ask_inventory_on_launch = $14, ask_credential_on_launch = $15,
+		    survey_enabled = $16, survey_spec = $17,
+		    webhook_enabled = $18, webhook_service = $19, webhook_key = $20, use_fact_cache = $21,
+		    execution_pack_id = $22, allow_simultaneous = $23,
 		    modified_at = now()
 		WHERE id = $1
 		RETURNING ` + JobTemplateCols
@@ -108,6 +110,7 @@ func (s *TemplateStore) Update(ctx context.Context, id int64, input models.JobTe
 		id, input.Name, input.Description, input.Playbook,
 		input.PlaybookContent, input.ProjectID, input.Verbosity, input.InventoryID, input.CredentialID,
 		input.ExtraVars, input.JobLimit, input.AskVariablesOnLaunch, input.AskLimitOnLaunch,
+		input.AskInventoryOnLaunch, input.AskCredentialOnLaunch,
 		input.SurveyEnabled, input.SurveySpec,
 		input.WebhookEnabled, input.WebhookService, input.WebhookKey, input.UseFactCache,
 		input.ExecutionPackID, input.AllowSimultaneous,

@@ -20,7 +20,7 @@ const (
 	HostCols           = `id, inventory_id, name, description, variables, enabled, is_control_node, is_runner_host, runner_last_seen, runner_healthy, created_at, modified_at`
 	InventoryCols      = `id, organization_id, name, description, kind, content, created_at, modified_at`
 	GroupCols          = `id, inventory_id, name, description, variables, created_at, modified_at`
-	JobTemplateCols    = `id, organization_id, name, description, inventory_id, project_id, playbook, playbook_content, unified_job_template_id, credential_id, execution_pack_id, forks, job_type, verbosity, extra_vars, job_limit, ask_variables_on_launch, ask_limit_on_launch, survey_enabled, survey_spec, webhook_enabled, webhook_service, webhook_key, use_fact_cache, allow_simultaneous, created_at, modified_at`
+	JobTemplateCols    = `id, organization_id, name, description, inventory_id, project_id, playbook, playbook_content, unified_job_template_id, credential_id, execution_pack_id, forks, job_type, verbosity, extra_vars, job_limit, ask_variables_on_launch, ask_limit_on_launch, ask_inventory_on_launch, ask_credential_on_launch, survey_enabled, survey_spec, webhook_enabled, webhook_service, webhook_key, use_fact_cache, allow_simultaneous, created_at, modified_at`
 	ProjectCols        = `id, organization_id, name, description, scm_type, scm_url, scm_branch, created_at, modified_at`
 	OrganizationCols   = `id, name, description, created_at, modified_at`
 	TeamCols           = `id, organization_id, name, description, created_at, modified_at`
